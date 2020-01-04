@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+    <manifest package="com.example.map" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <!-- io.flutter.app.FlutterApplication is an android.app.Application thatcalls FlutterMain.startInitialization(this); in its onCreate method.In most cases you can leave this as-is, but you if you want to provideadditional functionality it is fine to subclass or reimplementFlutterApplication and put your custom class here. -->
+
+
+
+    -<application android:name="io.flutter.app.FlutterApplication" android:icon="@mipmap/ic_launcher" android:label="Map Flutter">
+
+    <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCQKKiOGablkNeAoIGYTzEj-muQnhNhy1c"/>
+
+
+    -<activity android:name=".MainActivity" android:windowSoftInputMode="adjustResize" android:hardwareAccelerated="true" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:theme="@style/LaunchTheme" android:launchMode="singleTop">
+
+    <!-- This keeps the window background of the activity showinguntil Flutter renders its first frame. It can be removed ifthere is no splash screen (such as the default splash screendefined in @style/LaunchTheme). -->
+
+
+    <meta-data android:name="io.flutter.app.android.SplashScreenUntilFirstFrame" android:value="true"/>
+
+
+    -<intent-filter>
+
+    <action android:name="android.intent.action.MAIN"/>
+
+    <category android:name="android.intent.category.LAUNCHER"/>
+
+</intent-filter>
+
+</activity>
+
+</application>
+
+</manifest>
