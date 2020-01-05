@@ -23,8 +23,6 @@ class MapsDemo extends StatefulWidget {
 }
 
 class MapsDemoState extends State<MapsDemo> {
-
-
   CameraPosition _positionSearchCamera;
   Coordinates _positionSearch;
   BitmapDescriptor customIcon;
@@ -37,15 +35,15 @@ class MapsDemoState extends State<MapsDemo> {
 //  GoogleMapController _controller;
   List<LatLng> routeCoords;
   GoogleMapPolyline googleMapPolyline =
-  new GoogleMapPolyline(apiKey: "AIzaSyCQKKiOGablkNeAoIGYTzEj-muQnhNhy1c");
+      new GoogleMapPolyline(apiKey: "AIzaSyCQKKiOGablkNeAoIGYTzEj-muQnhNhy1c");
 
   Future getsomePoints() async {
     print('getsomePoints');
     var permissions =
-    await Permission.getPermissionsStatus([PermissionName.Location]);
+        await Permission.getPermissionsStatus([PermissionName.Location]);
     if (permissions[0].permissionStatus == PermissionStatus.notAgain) {
       var askpermissions =
-      await Permission.requestPermissions([PermissionName.Location]);
+          await Permission.requestPermissions([PermissionName.Location]);
     } else {
       routeCoords = await googleMapPolyline.getCoordinatesWithLocation(
           origin: LatLng(22.5735, 88.4331),
@@ -59,9 +57,9 @@ class MapsDemoState extends State<MapsDemo> {
     print('getaddress');
     routeCoords = await googleMapPolyline.getPolylineCoordinatesWithAddress(
         origin:
-        'EC-146 (Near City Center I, Sector 1, Bidhannagar, Kolkata, West Bengal 700064',
+            'EC-146 (Near City Center I, Sector 1, Bidhannagar, Kolkata, West Bengal 700064',
         destination:
-        'DC Block, Sector 1, Bidhannagar, Kolkata, West Bengal 700064',
+            'DC Block, Sector 1, Bidhannagar, Kolkata, West Bengal 700064',
         mode: RouteMode.driving);
     //getActualRoute();
 
@@ -161,7 +159,6 @@ class MapsDemoState extends State<MapsDemo> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     createMarker(context);
@@ -187,36 +184,35 @@ class MapsDemoState extends State<MapsDemo> {
               onCameraMove: _onCameraMove,
             ),
 
-          Positioned(
-            top: 30.0,
-            right: 15.0,
-            left: 15.0,
-            child: Container(
-              height: 50.0,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0), color: Colors.white),
-              child: TextField(
-                decoration: InputDecoration(
-                    hintText: 'Enter Address',
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                    prefixIcon: IconButton(
-                        icon: Icon(Icons.search),
-                        onPressed: (){
-                          searchandNavigate();
-
-
-                        },//searchandNavigate,
-                        iconSize: 30.0)),
-                onChanged: (val) {
-                  setState(() {
+            Positioned(
+              top: 30.0,
+              right: 15.0,
+              left: 15.0,
+              child: Container(
+                height: 50.0,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.white),
+                child: TextField(
+                  decoration: InputDecoration(
+                      hintText: 'Enter Address',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                      prefixIcon: IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            searchandNavigate();
+                          }, //searchandNavigate,
+                          iconSize: 30.0)),
+                  onChanged: (val) {
+                    setState(() {
 //                    searchAddr = val;
-                  });
-                },
+                    });
+                  },
+                ),
               ),
             ),
-          ),
 
 //            mapToggle
 //                ? GoogleMap(
@@ -264,7 +260,7 @@ class MapsDemoState extends State<MapsDemo> {
                     ),
                     height: 180.0,
                     margin:
-                    EdgeInsets.only(right: 20.0, left: 20.0, bottom: 70.0),
+                        EdgeInsets.only(right: 20.0, left: 20.0, bottom: 70.0),
                     child: Stack(
                       children: <Widget>[
                         Container(
@@ -280,7 +276,7 @@ class MapsDemoState extends State<MapsDemo> {
                             children: <Widget>[
                               Padding(
                                 padding:
-                                const EdgeInsets.only(left: 8.0, top: 8.0),
+                                    const EdgeInsets.only(left: 8.0, top: 8.0),
                                 child: Row(
                                   children: <Widget>[
                                     IconShadowWidget(Icon(
@@ -289,7 +285,7 @@ class MapsDemoState extends State<MapsDemo> {
                                         size: 16.0)),
                                     Padding(
                                       padding:
-                                      const EdgeInsets.only(left: 16.0),
+                                          const EdgeInsets.only(left: 16.0),
                                       child: Text(
                                         'Brooklyn, New York, USA',
                                         style: TextStyle(color: Colors.white),
@@ -337,7 +333,7 @@ class MapsDemoState extends State<MapsDemo> {
                                         size: 16.0)),
                                     Padding(
                                       padding:
-                                      const EdgeInsets.only(left: 16.0),
+                                          const EdgeInsets.only(left: 16.0),
                                       child: Text(
                                         'Add destination',
                                         style: TextStyle(color: Colors.white),
@@ -370,7 +366,7 @@ class MapsDemoState extends State<MapsDemo> {
                                           children: <Widget>[
                                             Padding(
                                               padding:
-                                              const EdgeInsets.all(6.0),
+                                                  const EdgeInsets.all(6.0),
                                               child: Icon(
                                                 Icons.directions_car,
                                                 color: Color(0xFF148CA6),
@@ -379,7 +375,7 @@ class MapsDemoState extends State<MapsDemo> {
                                             ),
                                             Padding(
                                               padding:
-                                              const EdgeInsets.all(6.0),
+                                                  const EdgeInsets.all(6.0),
                                               child: Text(
                                                 "Select your Uber",
                                                 style: TextStyle(
@@ -397,17 +393,17 @@ class MapsDemoState extends State<MapsDemo> {
                                                 children: <Widget>[
                                                   Padding(
                                                     padding:
-                                                    const EdgeInsets.only(
-                                                        left: 8.0,
-                                                        right: 8.0),
+                                                        const EdgeInsets.only(
+                                                            left: 8.0,
+                                                            right: 8.0),
                                                     child: Container(
                                                       height: 30.0,
                                                       width: 30.0,
                                                       decoration: BoxDecoration(
                                                           shape:
-                                                          BoxShape.circle,
+                                                              BoxShape.circle,
                                                           image:
-                                                          DecorationImage(
+                                                              DecorationImage(
                                                             image: AssetImage(
                                                                 'images/car.png'),
                                                           )),
@@ -429,17 +425,17 @@ class MapsDemoState extends State<MapsDemo> {
                                                 children: <Widget>[
                                                   Padding(
                                                     padding:
-                                                    const EdgeInsets.only(
-                                                        left: 8.0,
-                                                        right: 8.0),
+                                                        const EdgeInsets.only(
+                                                            left: 8.0,
+                                                            right: 8.0),
                                                     child: Container(
                                                       height: 30.0,
                                                       width: 30.0,
                                                       decoration: BoxDecoration(
                                                           shape:
-                                                          BoxShape.circle,
+                                                              BoxShape.circle,
                                                           image:
-                                                          DecorationImage(
+                                                              DecorationImage(
                                                             image: AssetImage(
                                                                 'images/car.png'),
                                                           )),
@@ -450,7 +446,7 @@ class MapsDemoState extends State<MapsDemo> {
                                                     style: TextStyle(
                                                         fontSize: 7.0,
                                                         color:
-                                                        Color(0xFF148CA6)),
+                                                            Color(0xFF148CA6)),
                                                   ),
                                                   Text('6:18pm',
                                                       style: TextStyle(
@@ -463,17 +459,17 @@ class MapsDemoState extends State<MapsDemo> {
                                                 children: <Widget>[
                                                   Padding(
                                                     padding:
-                                                    const EdgeInsets.only(
-                                                        left: 8.0,
-                                                        right: 8.0),
+                                                        const EdgeInsets.only(
+                                                            left: 8.0,
+                                                            right: 8.0),
                                                     child: Container(
                                                       height: 30.0,
                                                       width: 30.0,
                                                       decoration: BoxDecoration(
                                                           shape:
-                                                          BoxShape.circle,
+                                                              BoxShape.circle,
                                                           image:
-                                                          DecorationImage(
+                                                              DecorationImage(
                                                             image: AssetImage(
                                                                 'images/car.png'),
                                                           )),
@@ -484,7 +480,7 @@ class MapsDemoState extends State<MapsDemo> {
                                                     style: TextStyle(
                                                         fontSize: 7.0,
                                                         color:
-                                                        Color(0xFF148CA6)),
+                                                            Color(0xFF148CA6)),
                                                   ),
                                                   Text('6:15pm',
                                                       style: TextStyle(
@@ -507,7 +503,7 @@ class MapsDemoState extends State<MapsDemo> {
                                           children: <Widget>[
                                             Padding(
                                               padding:
-                                              const EdgeInsets.all(6.0),
+                                                  const EdgeInsets.all(6.0),
                                               child: Icon(
                                                 Icons
                                                     .airline_seat_recline_normal,
@@ -517,7 +513,7 @@ class MapsDemoState extends State<MapsDemo> {
                                             ),
                                             Padding(
                                               padding:
-                                              const EdgeInsets.all(6.0),
+                                                  const EdgeInsets.all(6.0),
                                               child: Text(
                                                 "Passenger",
                                                 style: TextStyle(
@@ -540,7 +536,7 @@ class MapsDemoState extends State<MapsDemo> {
                                               ),
                                               Expanded(
                                                 child:
-                                                new CircularPercentIndicator(
+                                                    new CircularPercentIndicator(
                                                   radius: 55.0,
                                                   lineWidth: 0.5,
                                                   percent: 1.0,
@@ -550,7 +546,7 @@ class MapsDemoState extends State<MapsDemo> {
                                                         color: Colors.white),
                                                   ),
                                                   progressColor:
-                                                  Color(0xFF148CA6),
+                                                      Color(0xFF148CA6),
                                                 ),
                                               ),
                                               Text(
@@ -631,7 +627,7 @@ class MapsDemoState extends State<MapsDemo> {
     });
   }
 
-  Future searchandNavigate() async{
+  Future searchandNavigate() async {
     final query = "1600 Amphiteatre Parkway, Mountain View";
     var addresses = await Geocoder.local.findAddressesFromQuery(query);
     var first = addresses.first;
@@ -639,15 +635,23 @@ class MapsDemoState extends State<MapsDemo> {
     _positionSearch = first.coordinates;
 
     print('okok ${_positionSearch.latitude}');
-
-    _positionSearchCamera = CameraPosition(target: LatLng(_positionSearch.latitude, _positionSearch.longitude),zoom: 11.0);
-
+    _positionSearchCamera = CameraPosition(
+        target: LatLng(_positionSearch.latitude, _positionSearch.longitude),
+        zoom: 11.0);
     _goToSearchAddress();
-
   }
 
-  Future _goToSearchAddress() async{
+  Future _goToSearchAddress() async {
     final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_positionSearchCamera));
-     }
+    controller
+        .animateCamera(CameraUpdate.newCameraPosition(_positionSearchCamera));
+
+//    _markers.add(
+//      Marker(
+//        markerId: MarkerId(LatLng(_positionSearch.latitude,_positionSearch.longitude).toString()),
+//        //position: _lastMapPosition,
+//        icon: customIcon,
+//      ),
+//    );
+  }
 }
