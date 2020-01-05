@@ -23,6 +23,10 @@ class MapsDemo extends StatefulWidget {
 }
 
 class MapsDemoState extends State<MapsDemo> {
+
+
+  CameraPosition _positionSearchCamera;
+  Coordinates _positionSearch;
   BitmapDescriptor customIcon;
   Set<Marker> _markers = {};
   Set<Polyline> polyline = {};
@@ -628,10 +632,22 @@ class MapsDemoState extends State<MapsDemo> {
   }
 
   Future searchandNavigate() async{
-
     final query = "1600 Amphiteatre Parkway, Mountain View";
     var addresses = await Geocoder.local.findAddressesFromQuery(query);
     var first = addresses.first;
     print("ooo ${first.featureName} : ${first.coordinates}");
+    _positionSearch = first.coordinates;
+
+    print('okok ${_positionSearch.latitude}');
+
+    _positionSearchCamera = CameraPosition(target: LatLng(_positionSearch.latitude, _positionSearch.longitude),zoom: 11.0);
+
+    _goToSearchAddress();
+
   }
+
+  Future _goToSearchAddress() async{
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(_positionSearchCamera));
+     }
 }
