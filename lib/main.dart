@@ -1,3 +1,5 @@
+import 'package:geocoder/geocoder.dart';
+import 'package:geocoder/services/base.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -155,6 +157,7 @@ class MapsDemoState extends State<MapsDemo> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     createMarker(context);
@@ -179,6 +182,38 @@ class MapsDemoState extends State<MapsDemo> {
               markers: _markers,
               onCameraMove: _onCameraMove,
             ),
+
+          Positioned(
+            top: 30.0,
+            right: 15.0,
+            left: 15.0,
+            child: Container(
+              height: 50.0,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0), color: Colors.white),
+              child: TextField(
+                decoration: InputDecoration(
+                    hintText: 'Enter Address',
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                    prefixIcon: IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: (){
+                          searchandNavigate();
+
+
+                        },//searchandNavigate,
+                        iconSize: 30.0)),
+                onChanged: (val) {
+                  setState(() {
+//                    searchAddr = val;
+                  });
+                },
+              ),
+            ),
+          ),
+
 //            mapToggle
 //                ? GoogleMap(
 //                    onMapCreated: onMapCreated,
@@ -592,4 +627,11 @@ class MapsDemoState extends State<MapsDemo> {
     });
   }
 
+  Future searchandNavigate() async{
+
+    final query = "1600 Amphiteatre Parkway, Mountain View";
+    var addresses = await Geocoder.local.findAddressesFromQuery(query);
+    var first = addresses.first;
+    print("ooo ${first.featureName} : ${first.coordinates}");
+  }
 }
