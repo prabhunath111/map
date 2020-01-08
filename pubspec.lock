@@ -76,13 +76,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.3"
-  flutter_places_dialog:
-    dependency: "direct main"
-    description:
-      name: flutter_places_dialog
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.5"
   flutter_polyline_points:
     dependency: "direct main"
     description:

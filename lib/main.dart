@@ -1,6 +1,3 @@
-
-
-import 'package:flutter_places_dialog/flutter_places_dialog.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,8 +10,16 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geocoder/geocoder.dart';
 
-//kfjldkjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
-void main() => runApp(MapsDemo());
+import 'package:google_maps_webservice/places.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+
+GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: 'AIzaSyCQKKiOGablkNeAoIGYTzEj-muQnhNhy1c');
+
+
+
+void main() => runApp(MaterialApp(
+  home: MapsDemo(),
+));
 
 class MapsDemo extends StatefulWidget {
   MapsDemo() : super();
@@ -25,12 +30,17 @@ class MapsDemo extends StatefulWidget {
   MapsDemoState createState() => MapsDemoState();
 }
 
+final homeScaffoldKey = GlobalKey<ScaffoldState>();
+
 class MapsDemoState extends State<MapsDemo> {
 
 
   CameraPosition _positionSearchCamera;
   Coordinates _positionSearch;
   String searchAddr;
+
+  String _placeName = 'Unknown';
+
 
 
   BitmapDescriptor customIcon;
@@ -83,6 +93,7 @@ class MapsDemoState extends State<MapsDemo> {
     super.initState();
     _markers = Set.from([]);
 
+
     Geolocator().getCurrentPosition().then((currloc) {
       setState(() {
         currentLocation = currloc;
@@ -99,8 +110,6 @@ class MapsDemoState extends State<MapsDemo> {
         );
       });
     });
-    FlutterPlacesDialog
-        .setGoogleApiKey("AIzaSyCQKKiOGablkNeAoIGYTzEj-muQnhNhy1c");
 
     // getaddressPoints();
   }
@@ -209,13 +218,15 @@ class MapsDemoState extends State<MapsDemo> {
   }
 
 
+
+
   @override
   Widget build(BuildContext context) {
     createMarker(context);
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return
+
+      Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
           backgroundColor: Colors.blue,
@@ -234,29 +245,6 @@ class MapsDemoState extends State<MapsDemo> {
               onCameraMove: _onCameraMove,
             ),
 
-//            mapToggle
-//                ? GoogleMap(
-//                    onMapCreated: onMapCreated,
-//                    initialCameraPosition: CameraPosition(
-//                        target: LatLng(currentLocation.latitude,
-//                            currentLocation.longitude),
-//                        zoom: 8.0),
-//                  )
-//                : Center(
-//                    child: Text('Loading..Please wait!'),
-//                  ),
-            Positioned(
-                left: 20.0,
-                top:20.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.0),
-                      color: Colors.white
-                  ),
-                  height: 150.0,
-                  width: 300.0,
-                )
-            ),
 
             Padding(
               padding: EdgeInsets.all(16.0),
@@ -336,7 +324,6 @@ class MapsDemoState extends State<MapsDemo> {
                                                     hintText: 'Enter Address',
                                                     focusColor: Colors.white,
                                                     border: InputBorder.none,
-
                                                     contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
                                                     suffixIcon: IconButton(
                                                         icon: Icon(Icons.search),
@@ -348,9 +335,9 @@ class MapsDemoState extends State<MapsDemo> {
                                                 onChanged: (val) {
                                                   setState(() {
                                                     searchAddr = val;
-
                                                   });
                                                 },
+                                                onTap: _handlePressButton,
                                               )
                                           ),
                                         )
@@ -660,7 +647,6 @@ class MapsDemoState extends State<MapsDemo> {
             ),
           ],
         ),
-      ),
     );
   }
 
@@ -694,5 +680,27 @@ class MapsDemoState extends State<MapsDemo> {
       mapController = controller;
     });
   }
+
+  Future<void> _handlePressButton() async {
+    // show input autocomplete with selected mode
+    // then get the Prediction selected
+    Prediction p = await PlacesAutocomplete.show(
+      context: context,
+      apiKey: 'AIzaSyCQKKiOGablkNeAoIGYTzEj-muQnhNhy1c',
+//      onError: onError,
+      mode: Mode.overlay,
+      language: "en",
+      components: [Component(Component.country, "in")],
+
+    );
+
+//Displaying description of prediction
+    var placeDescription = p.description;
+    print('predict $placeDescription');
+    setState(() {
+      searchAddr = placeDescription;
+    });
+  }
+
 
 }
