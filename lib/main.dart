@@ -29,7 +29,7 @@ class MapsDemo extends StatefulWidget {
   MapsDemoState createState() => MapsDemoState();
 }
 
-TextEditingController _textEditingController = TextEditingController();
+TextEditingController _textOriginEditingController = TextEditingController();
 
 class MapsDemoState extends State<MapsDemo> {
   CameraPosition _positionSearchCamera;
@@ -199,7 +199,7 @@ class MapsDemoState extends State<MapsDemo> {
 
     _positionSearch = first.coordinates;
 
-    _positionSearchCamera =  CameraPosition(
+    _positionSearchCamera = CameraPosition(
         target: LatLng(_positionSearch.latitude, _positionSearch.longitude),
         zoom: 11.0);
 
@@ -209,13 +209,12 @@ class MapsDemoState extends State<MapsDemo> {
 
     LatLng _searchMapPosition =
         LatLng(_positionSearch.latitude, _positionSearch.longitude);
-    print('search ${_searchMapPosition.toString()}');
+
+//    print('search ${_searchMapPosition.toString()}');
 
 //    _onAddMarkerButtonPressed();
     LatLng originPosition =
-    LatLng(_searchMapPosition.latitude, _searchMapPosition.longitude);
-
-    print('origin $originPosition');
+        LatLng(_searchMapPosition.latitude, _searchMapPosition.longitude);
 
     setState(() {
       _markers.add(
@@ -226,7 +225,6 @@ class MapsDemoState extends State<MapsDemo> {
         ),
       );
     });
-
   }
 
   @override
@@ -319,40 +317,38 @@ class MapsDemoState extends State<MapsDemo> {
                                         padding:
                                             const EdgeInsets.only(right: 8.0),
                                         child: Container(
-                                            height: 30.0,
-                                            width: 250.0,
-                                            child: TextField(
-                                              decoration: InputDecoration(
-                                                  hintText: 'Enter Origin',
-                                                  focusColor: Colors.white,
-                                                  border: InputBorder.none,
-                                                  contentPadding:
-                                                      EdgeInsets.only(
-                                                          left: 15.0,
-                                                          top: 15.0),
-                                                /*  suffixIcon: IconButton(
-                                                      icon: Icon(Icons.search),
-                                                      onPressed: () {
-                                                        if (searchAddr
-                                                                .isNotEmpty &&
-                                                            searchAddr != null)
-                                                          searchandNavigate(
-                                                              searchAddr);
-                                                      }, //searchandNavigate,
-                                                      iconSize: 30.0)*/
-                                              ),
-                                              onTap: _handlePressButton,
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  searchAddr = val;
-                                                  controller: _textEditingController ;
-                                                });
-                                              },
-                                            )
+                                          height: 30.0,
+                                          width: 250.0,
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                                hintText: 'Enter Origin',
+                                                focusColor: Colors.white,
+                                                border: InputBorder.none,
+                                                contentPadding: EdgeInsets.only(
+                                                    left: 15.0, top: 15.0),
+                                                suffixIcon: IconButton(
+                                                    icon: Icon(Icons.search),
+                                                    onPressed: () {
+                                                      if (searchAddr
+                                                              .isNotEmpty &&
+                                                          searchAddr != null)
+                                                        searchandNavigate(
+                                                            searchAddr);
+                                                    }, //searchAndNavigate,
+                                                    iconSize: 30.0)),
+                                            onTap: _handlePressButton,
+                                            onChanged: (val) {
+                                              print('inside onChanged');
+                                              setState(() {
+                                                searchAddr = val;
+                                              });
+                                            },
+                                            controller:
+                                                _textOriginEditingController,
+
+                                          ),
                                         ),
                                       )
-
-
 
                                       /*Text(
                                         'Brooklyn, New York, USA',
@@ -398,29 +394,27 @@ class MapsDemoState extends State<MapsDemo> {
                                   IconShadowWidget(Icon(Icons.panorama_fish_eye,
                                       color: Color(0xFFFDDEEF), size: 16.0)),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child:
-                                    /*Text(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child:
+                                          /*Text(
                                       'Add destination',
                                       style: TextStyle(color: Colors.white),
                                     ), */
 
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.only(right: 3.0),
-                                      child: Container(
-                                          height: 20.0,
-                                          width: 250.0,
-                                          child: TextField(
-                                            decoration: InputDecoration(
+                                          Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 3.0),
+                                        child: Container(
+                                            height: 20.0,
+                                            width: 250.0,
+                                            child: TextField(
+                                              decoration: InputDecoration(
                                                 hintText: 'Enter Destination',
                                                 focusColor: Colors.white,
                                                 border: InputBorder.none,
-                                                contentPadding:
-                                                EdgeInsets.only(
-                                                    left: 12.0,
-                                                    top: 15.0),
-                                               /* suffixIcon: IconButton(
+                                                contentPadding: EdgeInsets.only(
+                                                    left: 12.0, top: 15.0),
+                                                /* suffixIcon: IconButton(
                                                     icon: Icon(Icons.search),
                                                     onPressed: () {
                                                       if (searchAddr
@@ -430,18 +424,15 @@ class MapsDemoState extends State<MapsDemo> {
                                                             searchAddr);
                                                     }, //searchandNavigate,
                                                     iconSize: 30.0)*/
-
-                                            ),
-                                            onTap: _handlePressButton,
-                                            onChanged: (val) {
-                                              setState(() {
-                                                searchAddr = val;
-                                              });
-                                            },
-                                          )
-                                      ),
-                                    )
-                                  )
+                                              ),
+                                              onTap: _handlePressButton,
+                                              onChanged: (val) {
+                                                setState(() {
+                                                  searchAddr = val;
+                                                });
+                                              },
+                                            )),
+                                      ))
                                 ],
                               ),
                             ),
@@ -730,11 +721,12 @@ class MapsDemoState extends State<MapsDemo> {
     );
 
 //Displaying description of prediction
-     placeDescription = p.description;
+    placeDescription = p.description;
     print('predict $placeDescription');
     setState(() {
       searchAddr = placeDescription;
       searchandNavigate(placeDescription);
     });
   }
+
 }
