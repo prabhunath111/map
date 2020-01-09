@@ -35,9 +35,11 @@ class MapsDemoState extends State<MapsDemo> {
   CameraPosition _positionSearchCamera;
   Coordinates _positionSearch;
   String searchAddr;
+
   bool origin=true;
 
-  var placeDescription;
+  var originPlaceDescription;
+  var destinationPlacesDescription;
 
   BitmapDescriptor customIcon;
   Set<Marker> _markers = {};
@@ -321,7 +323,7 @@ class MapsDemoState extends State<MapsDemo> {
                                           child: TextField(
 
                                             decoration: InputDecoration(
-                                                hintText: placeDescription==null?'Origin':placeDescription,
+                                                hintText: originPlaceDescription==null?'Origin':originPlaceDescription,
                                                 hintStyle: TextStyle(color: Colors.white),
                                                 focusColor: Colors.white,
                                                 border: InputBorder.none,
@@ -338,7 +340,7 @@ class MapsDemoState extends State<MapsDemo> {
                                                     }, //searchAndNavigate,
                                                     iconSize: 30.0)*/
                                             ),
-                                            onTap: ()=>_handlePressButton(),
+                                            onTap: ()=>_handlePressButton(origin),
                                             onChanged: (val) {
                                               print('inside onChanged');
                                               setState(() {
@@ -411,7 +413,7 @@ class MapsDemoState extends State<MapsDemo> {
                                             width: 250.0,
                                             child: TextField(
                                               decoration: InputDecoration(
-                                                hintText: placeDescription==null?'Enter Destination':placeDescription,
+                                                hintText: destinationPlacesDescription==null?'Enter Destination':destinationPlacesDescription,
                                                 hintStyle: TextStyle(color: Colors.white),
                                                 focusColor: Colors.white,
                                                 border: InputBorder.none,
@@ -428,7 +430,7 @@ class MapsDemoState extends State<MapsDemo> {
                                                     }, //searchandNavigate,
                                                     iconSize: 30.0)*/
                                               ),
-                                              onTap: () => _handlePressButton(),
+                                              onTap: () => _handlePressButton(!origin),
                                               onChanged: (val) {
                                                 setState(() {
                                                   searchAddr = val;
@@ -711,7 +713,8 @@ class MapsDemoState extends State<MapsDemo> {
     });
   }
 
-  Future<void> _handlePressButton() async {
+  Future<void> _handlePressButton(bool calledOrigin) async {
+
 
     // show input autocomplete with selected mode
     // then get the Prediction selected
@@ -725,12 +728,22 @@ class MapsDemoState extends State<MapsDemo> {
     );
 
 //Displaying description of prediction
-    placeDescription = p.description;
-    print('predict $placeDescription');
-    setState(() {
-      searchAddr = placeDescription;
-      searchandNavigate(placeDescription);
-    });
+    if(calledOrigin){
+      originPlaceDescription = p.description;
+      setState(() {
+        searchAddr = originPlaceDescription;
+        searchandNavigate(originPlaceDescription);
+      });
+    } else {
+      destinationPlacesDescription = p.description;
+      setState(() {
+        searchAddr = originPlaceDescription;
+        searchandNavigate(destinationPlacesDescription);
+      });
+    }
+
+    print('predict $originPlaceDescription');
+
   }
 
 }
