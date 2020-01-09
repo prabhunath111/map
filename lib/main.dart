@@ -32,16 +32,21 @@ class MapsDemo extends StatefulWidget {
 TextEditingController _textOriginEditingController = TextEditingController();
 
 class MapsDemoState extends State<MapsDemo> {
+
+  var _current = ['Your Location', 'Custom'];
+  var _currentItemSelected = 'Custom';
+  String dropdownValue ='Custom';
+
+
   CameraPosition _positionSearchCamera;
   Coordinates _positionSearch;
   String searchAddr;
-
-  bool origin=true;
-
+  bool origin = true;
   var originPlaceDescription;
   var destinationPlacesDescription;
 
   BitmapDescriptor customIcon;
+  Icon customDrop;
   Set<Marker> _markers = {};
   Set<Polyline> polyline = {};
   bool mapToggle = false;
@@ -81,7 +86,7 @@ class MapsDemoState extends State<MapsDemo> {
         mode: RouteMode.driving);
     //getActualRoute();
 
-    print("routeCoordsa $routeCoords");
+    print("routeCoords $routeCoords");
   }
 
   /*BitmapDescriptor customIcon;
@@ -109,7 +114,7 @@ class MapsDemoState extends State<MapsDemo> {
       });
     });
 
-    // getaddressPoints();
+//    getaddressPoints();
   }
 
   createMarker(context) {
@@ -123,6 +128,7 @@ class MapsDemoState extends State<MapsDemo> {
       });
     }
   }
+
 
   Completer<GoogleMapController> _controller = Completer();
   static const LatLng _center = const LatLng(22.5726, 88.3639);
@@ -233,6 +239,7 @@ class MapsDemoState extends State<MapsDemo> {
     createMarker(context);
 
     return Scaffold(
+
       appBar: AppBar(
         title: Text(widget.title),
         backgroundColor: Colors.blue,
@@ -306,11 +313,29 @@ class MapsDemoState extends State<MapsDemo> {
                           children: <Widget>[
                             Padding(
                               padding:
-                                  const EdgeInsets.only(left: 8.0, top: 8.0),
+                                  const EdgeInsets.only(left: 8.0, top: 5.0),
                               child: Row(
                                 children: <Widget>[
                                   IconShadowWidget(Icon(Icons.panorama_fish_eye,
                                       color: Colors.cyan, size: 16.0)),
+
+                                  /*Container(
+                                    width: 40.0,
+                                    child: DropdownButton<String>(
+                                      items: _currencies.map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value,style: TextStyle(fontSize: 12.0),),
+                                        );
+                                      }).toList(),
+                                      value: _currentItemSelected,
+                                      onChanged: (String newValueSelected) {
+                                        // Code to execute, when a menu item is selected from dropdown
+                                        _onDropDownItemSelected(newValueSelected);
+                                      },
+                                    ),
+                                  ),*/
+
                                   Padding(
                                       padding: const EdgeInsets.only(left: 4.0),
 //Have to change into text field
@@ -318,38 +343,55 @@ class MapsDemoState extends State<MapsDemo> {
                                         padding:
                                             const EdgeInsets.only(right: 8.0),
                                         child: Container(
-                                          height: 24.0,
-                                          width: 250.0,
-                                          child: TextField(
 
+                                          height: 24.0,
+                                          width: 180.0,
+                                          child:
+                                          TextField(
                                             decoration: InputDecoration(
-                                                hintText: originPlaceDescription==null?'Origin':originPlaceDescription,
-                                                hintStyle: TextStyle(color: Colors.white),
-                                                focusColor: Colors.white,
-                                                border: InputBorder.none,
-                                                contentPadding: EdgeInsets.only(
-                                                    left: 15.0, top: 15.0),
-                                                /*suffixIcon: IconButton(
-                                                    icon: Icon(Icons.search),
+                                              hintText:
+                                                  originPlaceDescription == null
+                                                      ? 'Enter Origin'
+                                                      : originPlaceDescription,
+                                              hintStyle: TextStyle(
+                                                  color: Colors.white),
+                                              focusColor: Colors.white,
+                                              border: InputBorder.none,
+                                              contentPadding: EdgeInsets.only(
+                                                  left: 15.0, top: 15.0),
+                                              /*suffixIcon:
+
+                                              IconButton(
+                                                    icon: Icon(Icons.arrow_drop_down),
                                                     onPressed: () {
-                                                      if (searchAddr
-                                                              .isNotEmpty &&
-                                                          searchAddr != null)
-                                                        searchandNavigate(
-                                                            searchAddr);
+                                                      print('okokokokok');
+
+                                                      DropdownButton<String>(
+                                                        items: _currencies.map((String value) {
+                                                          return DropdownMenuItem<String>(
+                                                            value: value,
+                                                            child: Text(value),
+                                                          );
+                                                        }).toList(),
+                                                        value: _currentItemSelected,
+                                                        onChanged: (String newValueSelected) {
+                                                          // Code to execute, when a menu item is selected from dropdown
+                                                          _onDropDownItemSelected(newValueSelected);
+                                                        },
+                                                      );
                                                     }, //searchAndNavigate,
                                                     iconSize: 30.0)*/
                                             ),
-                                            onTap: ()=>_handlePressButton(origin),
+
+                                            onTap: () =>
+                                                _handlePressButton(origin),
                                             onChanged: (val) {
-                                              print('inside onChanged');
                                               setState(() {
                                                 searchAddr = val;
                                               });
                                             },
                                             controller:
                                                 _textOriginEditingController,
-
                                           ),
                                         ),
                                       )
@@ -358,7 +400,25 @@ class MapsDemoState extends State<MapsDemo> {
                                         'Brooklyn, New York, USA',
                                         style: TextStyle(color: Colors.white),
                                       ),*/
-                                      )
+
+                                      ),
+                                  Container(
+                                    height: 30.0,
+                                    width: 99.0,
+                                    child: DropdownButton<String>(
+                                      items: _current.map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value,style: TextStyle(fontSize: 12.0),),
+                                        );
+                                      }).toList(),
+                                      value: _currentItemSelected,
+                                      onChanged: (String newValueSelected) {
+                                        // Code to execute, when a menu item is selected from dropdown
+                                        _onDropDownItemSelected(newValueSelected);
+                                      },
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -374,7 +434,7 @@ class MapsDemoState extends State<MapsDemo> {
                                     ),
                                     child: Container(
                                       height: 1.5,
-                                      width: 230.0,
+                                      width: MediaQuery.of(context).size.width-120,
                                       color: Colors.cyan,
                                     ),
                                   ),
@@ -413,8 +473,13 @@ class MapsDemoState extends State<MapsDemo> {
                                             width: 250.0,
                                             child: TextField(
                                               decoration: InputDecoration(
-                                                hintText: destinationPlacesDescription==null?'Enter Destination':destinationPlacesDescription,
-                                                hintStyle: TextStyle(color: Colors.white),
+                                                hintText:
+                                                    destinationPlacesDescription ==
+                                                            null
+                                                        ? 'Enter Destination'
+                                                        : destinationPlacesDescription,
+                                                hintStyle: TextStyle(
+                                                    color: Colors.white),
                                                 focusColor: Colors.white,
                                                 border: InputBorder.none,
                                                 contentPadding: EdgeInsets.only(
@@ -430,7 +495,8 @@ class MapsDemoState extends State<MapsDemo> {
                                                     }, //searchandNavigate,
                                                     iconSize: 30.0)*/
                                               ),
-                                              onTap: () => _handlePressButton(!origin),
+                                              onTap: () =>
+                                                  _handlePressButton(!origin),
                                               onChanged: (val) {
                                                 setState(() {
                                                   searchAddr = val;
@@ -714,8 +780,6 @@ class MapsDemoState extends State<MapsDemo> {
   }
 
   Future<void> _handlePressButton(bool calledOrigin) async {
-
-
     // show input autocomplete with selected mode
     // then get the Prediction selected
     Prediction p = await PlacesAutocomplete.show(
@@ -724,11 +788,11 @@ class MapsDemoState extends State<MapsDemo> {
 //      onError: onError,
       mode: Mode.overlay,
       language: "en",
-      components: [Component(Component.country, "in")],
+//      components: [Component(Component.country, "in"),],
     );
 
 //Displaying description of prediction
-    if(calledOrigin){
+    if (calledOrigin) {
       originPlaceDescription = p.description;
       setState(() {
         searchAddr = originPlaceDescription;
@@ -743,7 +807,12 @@ class MapsDemoState extends State<MapsDemo> {
     }
 
     print('predict $originPlaceDescription');
+  }
 
+  void _onDropDownItemSelected(String newValueSelected) {
+    setState(() {
+      this._currentItemSelected = newValueSelected;
+    });
   }
 
 }
