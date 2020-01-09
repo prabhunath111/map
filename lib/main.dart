@@ -35,6 +35,7 @@ class MapsDemoState extends State<MapsDemo> {
   CameraPosition _positionSearchCamera;
   Coordinates _positionSearch;
   String searchAddr;
+  bool origin=true;
 
   var placeDescription;
 
@@ -193,10 +194,8 @@ class MapsDemoState extends State<MapsDemo> {
   }
 
   Future searchandNavigate(String query) async {
-//    final query = "Patna";
     var addresses = await Geocoder.local.findAddressesFromQuery(query);
     var first = addresses.first;
-
     _positionSearch = first.coordinates;
 
     _positionSearchCamera = CameraPosition(
@@ -317,16 +316,18 @@ class MapsDemoState extends State<MapsDemo> {
                                         padding:
                                             const EdgeInsets.only(right: 8.0),
                                         child: Container(
-                                          height: 30.0,
+                                          height: 24.0,
                                           width: 250.0,
                                           child: TextField(
+
                                             decoration: InputDecoration(
-                                                hintText: 'Enter Origin',
+                                                hintText: placeDescription==null?'Origin':placeDescription,
+                                                hintStyle: TextStyle(color: Colors.white),
                                                 focusColor: Colors.white,
                                                 border: InputBorder.none,
                                                 contentPadding: EdgeInsets.only(
                                                     left: 15.0, top: 15.0),
-                                                suffixIcon: IconButton(
+                                                /*suffixIcon: IconButton(
                                                     icon: Icon(Icons.search),
                                                     onPressed: () {
                                                       if (searchAddr
@@ -335,8 +336,9 @@ class MapsDemoState extends State<MapsDemo> {
                                                         searchandNavigate(
                                                             searchAddr);
                                                     }, //searchAndNavigate,
-                                                    iconSize: 30.0)),
-                                            onTap: _handlePressButton,
+                                                    iconSize: 30.0)*/
+                                            ),
+                                            onTap: ()=>_handlePressButton(),
                                             onChanged: (val) {
                                               print('inside onChanged');
                                               setState(() {
@@ -409,7 +411,8 @@ class MapsDemoState extends State<MapsDemo> {
                                             width: 250.0,
                                             child: TextField(
                                               decoration: InputDecoration(
-                                                hintText: 'Enter Destination',
+                                                hintText: placeDescription==null?'Enter Destination':placeDescription,
+                                                hintStyle: TextStyle(color: Colors.white),
                                                 focusColor: Colors.white,
                                                 border: InputBorder.none,
                                                 contentPadding: EdgeInsets.only(
@@ -425,7 +428,7 @@ class MapsDemoState extends State<MapsDemo> {
                                                     }, //searchandNavigate,
                                                     iconSize: 30.0)*/
                                               ),
-                                              onTap: _handlePressButton,
+                                              onTap: () => _handlePressButton(),
                                               onChanged: (val) {
                                                 setState(() {
                                                   searchAddr = val;
@@ -709,6 +712,7 @@ class MapsDemoState extends State<MapsDemo> {
   }
 
   Future<void> _handlePressButton() async {
+
     // show input autocomplete with selected mode
     // then get the Prediction selected
     Prediction p = await PlacesAutocomplete.show(
