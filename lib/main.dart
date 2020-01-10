@@ -33,9 +33,15 @@ TextEditingController _textOriginEditingController = TextEditingController();
 
 class MapsDemoState extends State<MapsDemo> {
 
+
+  static LatLng _searchDestinationMapPosition;
+  static LatLng _searchOriginMapPosition;
+
   var _current = ['Your Location', 'Custom'];
   var _currentItemSelected = 'Custom';
   String dropdownValue ='Custom';
+
+  LatLngBounds bound;
 
 
   CameraPosition _positionSearchCamera;
@@ -53,9 +59,9 @@ class MapsDemoState extends State<MapsDemo> {
   var currentLocation;
   var currentLatitude;
   var currentLongitude;
+
   GoogleMapController mapController;
 
-//  GoogleMapController _controller;
   List<LatLng> routeCoords;
   GoogleMapPolyline _googleMapPolyline =
       new GoogleMapPolyline(apiKey: "AIzaSyCQKKiOGablkNeAoIGYTzEj-muQnhNhy1c");
@@ -97,6 +103,7 @@ class MapsDemoState extends State<MapsDemo> {
     super.initState();
     _markers = Set.from([]);
 
+
     Geolocator().getCurrentPosition().then((currloc) {
       setState(() {
         currentLocation = currloc;
@@ -132,7 +139,7 @@ class MapsDemoState extends State<MapsDemo> {
 
   Completer<GoogleMapController> _controller = Completer();
   static const LatLng _center = const LatLng(22.5726, 88.3639);
-  LatLng _lastMapPosition = _center;
+   LatLng _lastMapPosition = _center;
   MapType _currentMapType = MapType.normal;
 
   static final CameraPosition _position1 = CameraPosition(
@@ -201,7 +208,7 @@ class MapsDemoState extends State<MapsDemo> {
     );
   }
 
-  Future searchandNavigate(String query) async {
+  Future searchandNavigate(bool origin, String query) async {
     var addresses = await Geocoder.local.findAddressesFromQuery(query);
     var first = addresses.first;
     _positionSearch = first.coordinates;
@@ -214,25 +221,77 @@ class MapsDemoState extends State<MapsDemo> {
     controller
         .animateCamera(CameraUpdate.newCameraPosition(_positionSearchCamera));
 
-    LatLng _searchMapPosition =
-        LatLng(_positionSearch.latitude, _positionSearch.longitude);
+    if(origin){
+       _searchOriginMapPosition =
+      LatLng(_positionSearch.latitude, _positionSearch.longitude);
 
-//    print('search ${_searchMapPosition.toString()}');
+       print('_searchOriginMapPosition $_searchOriginMapPosition');
 
-//    _onAddMarkerButtonPressed();
-    LatLng originPosition =
-        LatLng(_searchMapPosition.latitude, _searchMapPosition.longitude);
+      LatLng originPosition =   LatLng(_searchOriginMapPosition.latitude, _searchOriginMapPosition.longitude);
 
+      setState(() {
+        _markers.add(
+          Marker(
+            markerId: MarkerId(originPosition.toString()),
+            position: originPosition,
+            icon: customIcon,
+          ),
+        );
+
+      });
+    }
+
+    else {
+
+       _searchDestinationMapPosition =
+      LatLng(_positionSearch.latitude, _positionSearch.longitude);
+
+      print('_searchDestinationMapPosition $_searchDestinationMapPosition');
+
+      LatLng originPosition =
+      LatLng(_searchDestinationMapPosition.latitude, _searchDestinationMapPosition.longitude);
+
+      setState(() {
+        _markers.add(
+          Marker(
+            markerId: MarkerId(originPosition.toString()),
+            position: originPosition,
+            icon: customIcon,
+          ),
+        );
+      });
+    }
+
+if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
+
+   if(_searchOriginMapPosition.latitude < _searchDestinationMapPosition.latitude){
+      bound = LatLngBounds(southwest: _searchOriginMapPosition, northeast: _searchDestinationMapPosition);
+   } else {
+      bound = LatLngBounds(southwest:  _searchDestinationMapPosition, northeast:_searchOriginMapPosition);
+   }
+
+  mapController = controller;
+  CameraUpdate u2 = CameraUpdate.newLatLngBounds(bound, 10);
+  this.mapController.animateCamera(u2).then((void v){
     setState(() {
-      _markers.add(
-        Marker(
-          markerId: MarkerId(originPosition.toString()),
-          position: originPosition,
-          icon: customIcon,
-        ),
-      );
+      check(u2,this.mapController);
     });
+  });
+}
+
   }
+
+  void check(CameraUpdate u, GoogleMapController c) async {
+    c.animateCamera(u);
+    mapController.animateCamera(u);
+    LatLngBounds l1=await c.getVisibleRegion();
+    LatLngBounds l2=await c.getVisibleRegion();
+    print(l1.toString());
+    print(l2.toString());
+    if(l1.southwest.latitude==-90 ||l2.southwest.latitude==-90)
+      check(u, c);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -796,13 +855,13 @@ class MapsDemoState extends State<MapsDemo> {
       originPlaceDescription = p.description;
       setState(() {
         searchAddr = originPlaceDescription;
-        searchandNavigate(originPlaceDescription);
+        searchandNavigate(calledOrigin, originPlaceDescription);
       });
     } else {
       destinationPlacesDescription = p.description;
       setState(() {
         searchAddr = originPlaceDescription;
-        searchandNavigate(destinationPlacesDescription);
+        searchandNavigate(calledOrigin, destinationPlacesDescription);
       });
     }
 
