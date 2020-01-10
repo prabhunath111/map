@@ -9,9 +9,9 @@ import 'package:permission/permission.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geocoder/geocoder.dart';
-
 import 'package:google_maps_webservice/places.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
+
 
 GoogleMapsPlaces _places =
     GoogleMapsPlaces(apiKey: 'AIzaSyCQKKiOGablkNeAoIGYTzEj-muQnhNhy1c');
@@ -83,7 +83,7 @@ class MapsDemoState extends State<MapsDemo> {
   }
 
   Future getaddressPoints() async {
-    print('getaddress');
+
     routeCoords = await _googleMapPolyline.getPolylineCoordinatesWithAddress(
         origin:
             'EC-146 (Near City Center I, Sector 1, Bidhannagar, Kolkata, West Bengal 700064',
@@ -183,8 +183,6 @@ class MapsDemoState extends State<MapsDemo> {
   }
 
   _onAddMarkerButtonPressed() {
-    print('inside add marker');
-    print('_lastMap $_lastMapPosition');
     setState(() {
       _markers.add(
         Marker(
@@ -225,8 +223,6 @@ class MapsDemoState extends State<MapsDemo> {
        _searchOriginMapPosition =
       LatLng(_positionSearch.latitude, _positionSearch.longitude);
 
-       print('_searchOriginMapPosition $_searchOriginMapPosition');
-
       LatLng originPosition =   LatLng(_searchOriginMapPosition.latitude, _searchOriginMapPosition.longitude);
 
       setState(() {
@@ -246,7 +242,6 @@ class MapsDemoState extends State<MapsDemo> {
        _searchDestinationMapPosition =
       LatLng(_positionSearch.latitude, _positionSearch.longitude);
 
-      print('_searchDestinationMapPosition $_searchDestinationMapPosition');
 
       LatLng originPosition =
       LatLng(_searchDestinationMapPosition.latitude, _searchDestinationMapPosition.longitude);
@@ -271,7 +266,7 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
    }
 
   mapController = controller;
-  CameraUpdate u2 = CameraUpdate.newLatLngBounds(bound, 10);
+  CameraUpdate u2 = CameraUpdate.newLatLngBounds(bound, 50);
   this.mapController.animateCamera(u2).then((void v){
     setState(() {
       check(u2,this.mapController);
@@ -331,12 +326,7 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
                     height: 16.0,
                   ),
                   button(_goToPosition1, Icons.location_searching),
-//Button for draw route in google map
 
-                  RaisedButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.directions_car),
-                      label: Text('path')),
                 ],
               ),
             ),
@@ -378,22 +368,6 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
                                   IconShadowWidget(Icon(Icons.panorama_fish_eye,
                                       color: Colors.cyan, size: 16.0)),
 
-                                  /*Container(
-                                    width: 40.0,
-                                    child: DropdownButton<String>(
-                                      items: _currencies.map((String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value,style: TextStyle(fontSize: 12.0),),
-                                        );
-                                      }).toList(),
-                                      value: _currentItemSelected,
-                                      onChanged: (String newValueSelected) {
-                                        // Code to execute, when a menu item is selected from dropdown
-                                        _onDropDownItemSelected(newValueSelected);
-                                      },
-                                    ),
-                                  ),*/
 
                                   Padding(
                                       padding: const EdgeInsets.only(left: 4.0),
@@ -404,7 +378,7 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
                                         child: Container(
 
                                           height: 24.0,
-                                          width: 180.0,
+                                          width: 170.0,
                                           child:
                                           TextField(
                                             decoration: InputDecoration(
@@ -418,28 +392,7 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
                                               border: InputBorder.none,
                                               contentPadding: EdgeInsets.only(
                                                   left: 15.0, top: 15.0),
-                                              /*suffixIcon:
 
-                                              IconButton(
-                                                    icon: Icon(Icons.arrow_drop_down),
-                                                    onPressed: () {
-                                                      print('okokokokok');
-
-                                                      DropdownButton<String>(
-                                                        items: _currencies.map((String value) {
-                                                          return DropdownMenuItem<String>(
-                                                            value: value,
-                                                            child: Text(value),
-                                                          );
-                                                        }).toList(),
-                                                        value: _currentItemSelected,
-                                                        onChanged: (String newValueSelected) {
-                                                          // Code to execute, when a menu item is selected from dropdown
-                                                          _onDropDownItemSelected(newValueSelected);
-                                                        },
-                                                      );
-                                                    }, //searchAndNavigate,
-                                                    iconSize: 30.0)*/
                                             ),
 
                                             onTap: () =>
@@ -461,23 +414,26 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
                                       ),*/
 
                                       ),
-                                  Container(
-                                    height: 30.0,
-                                    width: 99.0,
-                                    child: DropdownButton<String>(
-                                      items: _current.map((String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value,style: TextStyle(fontSize: 12.0),),
-                                        );
-                                      }).toList(),
-                                      value: _currentItemSelected,
-                                      onChanged: (String newValueSelected) {
-                                        // Code to execute, when a menu item is selected from dropdown
-                                        _onDropDownItemSelected(newValueSelected);
-                                      },
+
+                                     Padding(
+                                       padding: const EdgeInsets.only(right:6.0),
+                                       child: DropdownButton<String>(
+                                        items: _current.map((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value,style: TextStyle(fontSize:16.0,color: Colors.black),),
+                                          );
+                                        }).toList(),
+                                        value: _currentItemSelected,
+                                        onChanged: (String newValueSelected) {
+                                          // Code to execute, when a menu item is selected from dropdown
+                                          _onDropDownItemSelected(newValueSelected);
+
+
+                                        },
                                     ),
-                                  ),
+                                     ),
+
                                 ],
                               ),
                             ),
@@ -797,7 +753,7 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
                 colors: <Color>[Colors.pinkAccent, Colors.redAccent],
               ),
               onPressed: () {
-                print('button clicked');
+
               },
             ),
           ),
@@ -865,7 +821,6 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
       });
     }
 
-    print('predict $originPlaceDescription');
   }
 
   void _onDropDownItemSelected(String newValueSelected) {
