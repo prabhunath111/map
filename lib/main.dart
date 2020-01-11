@@ -229,11 +229,6 @@ class MapsDemoState extends State<MapsDemo> {
     );
   }
 
- /* void currentAddress()async{
-    var currentAddress = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    var first1 = currentAddress.first;
-
-  }*/
 
   Future searchandNavigate(bool origin, String query) async {
     var addresses = await Geocoder.local.findAddressesFromQuery(query);
