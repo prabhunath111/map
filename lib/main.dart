@@ -36,6 +36,7 @@ class MapsDemoState extends State<MapsDemo> {
 
   static LatLng _searchDestinationMapPosition;
   static LatLng _searchOriginMapPosition;
+  String currentAddress;
 
   var _current = ['Your Location', 'Custom'];
   var _currentItemSelected = 'Custom';
@@ -44,8 +45,8 @@ class MapsDemoState extends State<MapsDemo> {
   LatLngBounds bound;
 
 
-  CameraPosition _positionSearchCamera;
-  Coordinates _positionSearch;
+  CameraPosition _searchCameraPosition;
+  Coordinates _positionSearchCoordinates;
   String searchAddr;
   bool origin = true;
   var originPlaceDescription;
@@ -65,6 +66,8 @@ class MapsDemoState extends State<MapsDemo> {
   List<LatLng> routeCoords;
   GoogleMapPolyline _googleMapPolyline =
       new GoogleMapPolyline(apiKey: "AIzaSyCQKKiOGablkNeAoIGYTzEj-muQnhNhy1c");
+
+
 
   Future getsomePoints() async {
     print('getsomePoints');
@@ -103,14 +106,18 @@ class MapsDemoState extends State<MapsDemo> {
     super.initState();
     _markers = Set.from([]);
 
-
     Geolocator().getCurrentPosition().then((currloc) {
       setState(() {
         currentLocation = currloc;
         mapToggle = true;
+        print('current location $currentLocation');
 
         LatLng _lastMapPosition =
             LatLng(currentLocation.latitude, currentLocation.longitude);
+        print('last map $_lastMapPosition');
+
+       currentAddressFunction(currentLocation.latitude,currentLocation.longitude);
+
         _markers.add(
           Marker(
             markerId: MarkerId(_lastMapPosition.toString()),
@@ -122,6 +129,22 @@ class MapsDemoState extends State<MapsDemo> {
     });
 
 //    getaddressPoints();
+  }
+
+  void currentAddressFunction(double latitude, double longitude) async {
+
+    final coordinates = new Coordinates(latitude, longitude);
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+
+    var first = addresses.first;
+    currentAddress = first.addressLine;
+
+ /*   print('firstx $first');
+    print('firstc ${first.featureName}');
+    print('firstd ${first.locality}');
+    print('firstd ${first.addressLine}');*/
+
+//    print(" check kr ${first.featureName} : ${first.addressLine}");
   }
 
   createMarker(context) {
@@ -206,22 +229,28 @@ class MapsDemoState extends State<MapsDemo> {
     );
   }
 
+ /* void currentAddress()async{
+    var currentAddress = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    var first1 = currentAddress.first;
+
+  }*/
+
   Future searchandNavigate(bool origin, String query) async {
     var addresses = await Geocoder.local.findAddressesFromQuery(query);
     var first = addresses.first;
-    _positionSearch = first.coordinates;
+    _positionSearchCoordinates = first.coordinates;
 
-    _positionSearchCamera = CameraPosition(
-        target: LatLng(_positionSearch.latitude, _positionSearch.longitude),
+    _searchCameraPosition = CameraPosition(
+        target: LatLng(_positionSearchCoordinates.latitude, _positionSearchCoordinates.longitude),
         zoom: 11.0);
 
     final GoogleMapController controller = await _controller.future;
     controller
-        .animateCamera(CameraUpdate.newCameraPosition(_positionSearchCamera));
+        .animateCamera(CameraUpdate.newCameraPosition(_searchCameraPosition));
 
     if(origin){
        _searchOriginMapPosition =
-      LatLng(_positionSearch.latitude, _positionSearch.longitude);
+      LatLng(_positionSearchCoordinates.latitude, _positionSearchCoordinates.longitude);
 
       LatLng originPosition =   LatLng(_searchOriginMapPosition.latitude, _searchOriginMapPosition.longitude);
 
@@ -240,7 +269,7 @@ class MapsDemoState extends State<MapsDemo> {
     else {
 
        _searchDestinationMapPosition =
-      LatLng(_positionSearch.latitude, _positionSearch.longitude);
+      LatLng(_positionSearchCoordinates.latitude, _positionSearchCoordinates.longitude);
 
 
       LatLng originPosition =
@@ -273,6 +302,7 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
     });
   });
 }
+
 
   }
 
@@ -376,7 +406,6 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
                                         padding:
                                             const EdgeInsets.only(right: 8.0),
                                         child: Container(
-
                                           height: 24.0,
                                           width: 170.0,
                                           child:
@@ -407,12 +436,10 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
                                           ),
                                         ),
                                       )
-
                                       /*Text(
                                         'Brooklyn, New York, USA',
                                         style: TextStyle(color: Colors.white),
                                       ),*/
-
                                       ),
 
                                      Padding(
@@ -428,12 +455,16 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
                                         onChanged: (String newValueSelected) {
                                           // Code to execute, when a menu item is selected from dropdown
                                           _onDropDownItemSelected(newValueSelected);
-
-
+                                          if (newValueSelected=='Your Location') {
+                                            _markers.clear();
+                                            searchandNavigate(origin, currentAddress);
+                                            originPlaceDescription = currentAddress;
+                                          }  else {
+                                                _handlePressButton(origin);
+                                          }
                                         },
                                     ),
                                      ),
-
                                 ],
                               ),
                             ),
