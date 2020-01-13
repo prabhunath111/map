@@ -58,14 +58,11 @@ class MapsDemoState extends State<MapsDemo> {
   Set<Polyline> polyline = {};
   bool mapToggle = false;
   var currentLocation;
-  var currentLatitude;
-  var currentLongitude;
 
   GoogleMapController mapController;
 
   List<LatLng> routeCoords;
-  GoogleMapPolyline _googleMapPolyline =
-      new GoogleMapPolyline(apiKey: "AIzaSyCQKKiOGablkNeAoIGYTzEj-muQnhNhy1c");
+  GoogleMapPolyline _googleMapPolyline = new GoogleMapPolyline(apiKey: "AIzaSyCQKKiOGablkNeAoIGYTzEj-muQnhNhy1c");
 
 
 
@@ -110,7 +107,6 @@ class MapsDemoState extends State<MapsDemo> {
       setState(() {
         currentLocation = currloc;
         mapToggle = true;
-        print('current location $currentLocation');
 
         LatLng _lastMapPosition =
             LatLng(currentLocation.latitude, currentLocation.longitude);
@@ -127,7 +123,6 @@ class MapsDemoState extends State<MapsDemo> {
         );
       });
     });
-
 //    getaddressPoints();
   }
 
@@ -142,9 +137,9 @@ class MapsDemoState extends State<MapsDemo> {
  /*   print('firstx $first');
     print('firstc ${first.featureName}');
     print('firstd ${first.locality}');
-    print('firstd ${first.addressLine}');*/
+    print('firstd ${first.addressLine}');
 
-//    print(" check kr ${first.featureName} : ${first.addressLine}");
+    print(" check kr ${first.featureName} : ${first.addressLine}"); */
   }
 
   createMarker(context) {
@@ -327,7 +322,7 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
         children: <Widget>[
           GoogleMap(
             onMapCreated: _onMapCreated,
-//              polylines: polyline,
+              polylines: polyline,
             initialCameraPosition: CameraPosition(
               target: _center,
               zoom: 11.0,
@@ -335,6 +330,7 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
             mapType: _currentMapType,
             markers: _markers,
             onCameraMove: _onCameraMove,
+            trafficEnabled: true,
           ),
           Padding(
             padding: EdgeInsets.all(16.0),
@@ -817,6 +813,7 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
   void onMapCreated(controller) {
     setState(() {
       mapController = controller;
+
     });
   }
 
@@ -829,7 +826,7 @@ if(_searchOriginMapPosition!=null && _searchDestinationMapPosition!=null){
 //      onError: onError,
       mode: Mode.overlay,
       language: "en",
-//      components: [Component(Component.country, "in"),],
+      components: [Component(Component.country, "in"),],
     );
 
 //Displaying description of prediction

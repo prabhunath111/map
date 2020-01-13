@@ -23,7 +23,7 @@ dependencies:
   percent_indicator: ^2.1.1+1
   flutter_polyline_points: ^0.1.0
   permission:
-  google_map_polyline: ^0.2.0+1
+  google_map_polyline:
   cloud_firestore:
   geolocator:
   geocoder:
